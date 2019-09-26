@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         List<Sensor> sensors = mSensorManager.getSensorList(Sensor.TYPE_ALL);
 
-
+        
 
 
 
