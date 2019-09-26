@@ -1,21 +1,13 @@
 package com.example.amazingrace;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
 import android.os.Bundle;
-import android.os.Handler;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.RelativeSizeSpan;
-import android.text.style.StyleSpan;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -31,8 +23,14 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.io.Console;
 import java.text.DecimalFormat;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -42,7 +40,8 @@ import java.util.List;
 
 //import android.support.v7.app.AppCompatActivity;
 
-public class MainActivity extends AppCompatActivity implements SensorEventListener {
+public class MainActivity extends AppCompatActivity implements SensorEventListener, OnMapReadyCallback {
+    GoogleMap googleMap;
     PieChart chart;
 
     private static final String TAG = "MainActivity";
@@ -86,9 +85,15 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        MapFragment mapFragment = (MapFragment) getFragmentManager()
+                .findFragmentById(R.id.map);
+
+        mapFragment.getMapAsync(this);
+
         currentActivity = findViewById(R.id.running);
         speedText = findViewById(R.id.speed);
-        distance = findViewById(R.id.distance);
+        distance = findViewById(R.id.gps_value);
 
         gps_value = findViewById(R.id.gps_value);
         button_gps = findViewById(R.id.button_gps);
@@ -127,7 +132,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     System.out.println(testLon);
 
 
-                    String string = new String("Lat: "+ latRounded+ " Long: "+lonRounded);
+                    String string = new String("Lat: "+ latRounded + "\n" + "Lon: "+lonRounded);
                     gps_value.setText(string);
 
                 }
@@ -260,8 +265,8 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         String walking = ("Walking");
         String standing = ("Stationary");
 
-        speedText.setText("Top Speed:");
-        distance.setText("Distance");
+        //speedText.setText("Top Speed:");
+        //distance.setText("Distance");
 
 
 
@@ -338,5 +343,23 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         mSensorManager.unregisterListener(MainActivity.this);
 
         super.onDestroy();
+    }
+
+
+    @Override
+    public void onMapReady(GoogleMap map) {
+        googleMap = map;
+
+        setUpMap();
+    }
+
+    public void setUpMap(){
+
+        googleMap.setMyLocationEnabled(true);
+        LatLng st_daves = new LatLng(-45.863607, 170.513729);
+        googleMap.addMarker(new MarkerOptions().position(st_daves)
+                .title("St Daves: Do 10 Star Jumps!"));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(st_daves));
+
     }
 }
