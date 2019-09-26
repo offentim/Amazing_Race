@@ -92,9 +92,21 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         List<Sensor> sensors = mSensorManager.getSensorList(Sensor.TYPE_ALL);
 
-        
+        button_gps.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                GPStracker g = new GPStracker(getApplicationContext());
+                Location l = g.getLocation();
 
-
+                if (l != null) {
+                    double lat = l.getLatitude();
+                    double lon = l.getLongitude();
+                    String string = new String("Lat: "+ lat+ " Long: "+lon);
+                    gps_value.setText(string);
+                    System.out.println(lat);
+                }
+            }
+        });
 
         if (mAccelerometer != null) {
             mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_GAME);
