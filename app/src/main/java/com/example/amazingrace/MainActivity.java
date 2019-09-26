@@ -33,6 +33,7 @@ import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
 
 import java.io.Console;
+import java.text.DecimalFormat;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Deque;
@@ -64,6 +65,7 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     Button results;
     Button button_gps;
+    Button button_test;
 
     int runCount = 0;
     int walkCount = 0;
@@ -71,6 +73,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     boolean gps = true;
 
+
+    double testLat = -45.866191;
+    double testLon = 170.515722;
+
+    double valueLat = 0;
+    double valueLon = 0;
 
 
 
@@ -87,10 +95,13 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         chart = findViewById(R.id.chart);
 
+        button_test = findViewById(R.id.button_test);
+
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
         List<Sensor> sensors = mSensorManager.getSensorList(Sensor.TYPE_ALL);
+
 
         button_gps.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,14 +110,41 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 Location l = g.getLocation();
 
                 if (l != null) {
+
+                    DecimalFormat f = new DecimalFormat("##.000000");
                     double lat = l.getLatitude();
                     double lon = l.getLongitude();
-                    String string = new String("Lat: "+ lat+ " Long: "+lon);
+                    String latRounded = f.format(lon);
+                    String lonRounded = f.format(lat);
+
+                    double doubleLat = Double.parseDouble(latRounded);
+                    double doubleLon = Double.parseDouble(latRounded);
+
+                    valueLat = doubleLat;
+                    valueLon = doubleLon;
+
+                    System.out.println(valueLon);
+                    System.out.println(testLon);
+
+
+                    String string = new String("Lat: "+ latRounded+ " Long: "+lonRounded);
                     gps_value.setText(string);
-                    System.out.println(lat);
+
                 }
             }
         });
+
+        button_test.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (valueLon >= 170.508000 && valueLon <= 170.508900){
+                    Toast.makeText(getApplicationContext(),"Success",Toast.LENGTH_LONG).show();
+                }else{
+                    Toast.makeText(getApplicationContext(),"Get moving",Toast.LENGTH_LONG).show();
+                }
+            }
+        });
+
 
         if (mAccelerometer != null) {
             mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_GAME);
