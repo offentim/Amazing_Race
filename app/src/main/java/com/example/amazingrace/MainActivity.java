@@ -68,6 +68,10 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     int runCount = 0;
     int walkCount = 0;
     int standCount = 0;
+    int totalSteps =0;
+
+
+
 
     boolean gps = true;
 

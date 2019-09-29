@@ -15,6 +15,12 @@ import androidx.core.content.ContextCompat;
 public class GPStracker implements LocationListener {
     Context context;
 
+    Location locationA = new Location("point A"); //Variables for calculating distance
+    Location locationB = new Location("point B");
+
+
+
+
     public GPStracker(Context c){
         context = c;
     }
