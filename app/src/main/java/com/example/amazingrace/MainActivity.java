@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
 
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
@@ -40,8 +41,8 @@ import java.util.List;
 
 //import android.support.v7.app.AppCompatActivity;
 
-public class MainActivity extends AppCompatActivity implements SensorEventListener, OnMapReadyCallback {
-    GoogleMap googleMap;
+public class MainActivity extends FragmentActivity implements SensorEventListener, OnMapReadyCallback {
+    GoogleMap googleMap = null;
     PieChart chart;
 
     private static final String TAG = "MainActivity";
@@ -55,6 +56,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     TextView speedText;
     TextView distance;
     TextView gps_value;
+    TextView commerce_success;
+    TextView stdaves_success;
+    TextView central_success;
 
     Deque<Double> real = new ArrayDeque<Double>();
 
@@ -62,7 +66,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     FFT fft = new FFT(windowSize);
 
-    Button results;
     Button button_gps;
     Button button_test;
 
@@ -70,14 +73,16 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     int walkCount = 0;
     int standCount = 0;
 
-    boolean gps = true;
-
 
     double testLat = -45.866191;
     double testLon = 170.515722;
 
     double valueLat = 0;
     double valueLon = 0;
+
+    boolean com = false;
+    boolean dav = false;
+    boolean cen = false;
 
 
 
@@ -102,6 +107,12 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
         button_test = findViewById(R.id.button_test);
 
+        GPStracker speedtest = new GPStracker(getApplicationContext());
+
+        commerce_success = findViewById(R.id.commerce_success);
+        central_success = findViewById(R.id.central_success);
+        stdaves_success = findViewById(R.id.stdaves_success);
+
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
@@ -122,14 +133,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     String latRounded = f.format(lon);
                     String lonRounded = f.format(lat);
 
-                    double doubleLat = Double.parseDouble(latRounded);
+                    double doubleLat = Double.parseDouble(lonRounded);
                     double doubleLon = Double.parseDouble(latRounded);
 
                     valueLat = doubleLat;
                     valueLon = doubleLon;
 
-                    System.out.println(valueLon);
-                    System.out.println(testLon);
+                    System.out.println(valueLat);
+
 
 
                     String string = new String("Lat: "+ latRounded + "\n" + "Lon: "+lonRounded);
@@ -138,12 +149,21 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                 }
             }
         });
-
         button_test.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (valueLon >= 170.508000 && valueLon <= 170.508900){
+                if (valueLon >= 170.515300 && valueLon <= 170.516400 && valueLat >= -45.867000 && valueLat <= -45.866000){
                     Toast.makeText(getApplicationContext(),"Success",Toast.LENGTH_LONG).show();
+                    com = true;
+
+                }else if(valueLon >=170.513300 && valueLon <=170.514000){
+                    Toast.makeText(getApplicationContext(),"Success",Toast.LENGTH_LONG).show();
+                    dav = true;
+
+                }else if(valueLon >=170.512200 && valueLon <=170.512900){
+                    Toast.makeText(getApplicationContext(),"Success",Toast.LENGTH_LONG).show();
+                    cen = true;
+
                 }else{
                     Toast.makeText(getApplicationContext(),"Get moving",Toast.LENGTH_LONG).show();
                 }
@@ -151,9 +171,13 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         });
 
 
+
+
         if (mAccelerometer != null) {
             mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_GAME);
         }
+
+
 
         chart.setUsePercentValues(true);
         chart.getDescription().setEnabled(false);
@@ -270,7 +294,18 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
 
 
-
+        if (com == true){
+            commerce_success.setText("Success");
+            commerce_success.setTextColor(getResources().getColor(R.color.Green));
+        }
+        if (dav == true){
+            stdaves_success.setText("Success");
+            stdaves_success.setTextColor(getResources().getColor(R.color.Green));
+        }
+        if (cen == true){
+            central_success.setText("Success");
+            central_success.setTextColor(getResources().getColor(R.color.Green));
+        }
 
 
         while (real.size()> fft.getWindowSize()){
@@ -355,10 +390,19 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     public void setUpMap(){
 
+
         googleMap.setMyLocationEnabled(true);
         LatLng st_daves = new LatLng(-45.863607, 170.513729);
+        LatLng commerce = new LatLng(-45.866391, 170.515965);
+        LatLng central = new LatLng(-45.866640, 170.512458);
+
+
         googleMap.addMarker(new MarkerOptions().position(st_daves)
-                .title("St Daves: Do 10 Star Jumps!"));
+                .title("St Daves"));
+        googleMap.addMarker(new MarkerOptions().position(commerce)
+                .title("The Commerce Building"));
+        googleMap.addMarker(new MarkerOptions().position(central)
+                .title("Central Library"));
         googleMap.moveCamera(CameraUpdateFactory.newLatLng(st_daves));
 
     }
