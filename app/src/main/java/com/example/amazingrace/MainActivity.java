@@ -12,7 +12,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.media.MediaPlayer;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentActivity;
@@ -73,9 +72,6 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
     int runCount = 0;
     int walkCount = 0;
     int standCount = 0;
-    int totalSteps =0;
-    private MediaPlayer success;
-
 
 
     double testLat = -45.866191;
@@ -109,15 +105,13 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
 
         chart = findViewById(R.id.chart);
 
-
+        button_test = findViewById(R.id.button_test);
 
         GPStracker speedtest = new GPStracker(getApplicationContext());
 
         commerce_success = findViewById(R.id.commerce_success);
         central_success = findViewById(R.id.central_success);
         stdaves_success = findViewById(R.id.stdaves_success);
-        success = MediaPlayer.create(this, R.raw.tada);
-
 
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -303,17 +297,14 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
         if (com == true){
             commerce_success.setText("Success");
             commerce_success.setTextColor(getResources().getColor(R.color.Green));
-            success.start();
         }
         if (dav == true){
             stdaves_success.setText("Success");
             stdaves_success.setTextColor(getResources().getColor(R.color.Green));
-            success.start();
         }
         if (cen == true){
             central_success.setText("Success");
             central_success.setTextColor(getResources().getColor(R.color.Green));
-            success.start();
         }
 
 

@@ -8,6 +8,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 //import android.support.v4.content.ContextCompat;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
@@ -15,30 +16,25 @@ import androidx.core.content.ContextCompat;
 public class GPStracker implements LocationListener {
     Context context;
 
-    Location locationA = new Location("point A"); //Variables for calculating distance
-    Location locationB = new Location("point B");
 
-
-
-
-    public GPStracker(Context c){
+    public GPStracker(Context c) {
         context = c;
     }
 
 
-    public Location getLocation(){
-        if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED){
-            Toast.makeText(context,"Permisison not Granted", Toast.LENGTH_SHORT).show();
+    public Location getLocation() {
+        if (ContextCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            Toast.makeText(context, "Permisison not Granted", Toast.LENGTH_SHORT).show();
             return null;
         }
-        LocationManager lm = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
+        LocationManager lm = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
         boolean isGPSenabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        if (isGPSenabled){
-            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER,6000,10,this);
-            Location l =lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        if (isGPSenabled) {
+            lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 3000, 5, this);
+            Location l = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             return l;
-        }else{
-            Toast.makeText(context,"Please Enable GPS",Toast.LENGTH_LONG);
+        } else {
+            Toast.makeText(context, "Please Enable GPS", Toast.LENGTH_LONG);
         }
         return null;
 
@@ -46,7 +42,6 @@ public class GPStracker implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-
     }
 
     @Override
