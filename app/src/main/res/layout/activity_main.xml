@@ -76,14 +76,17 @@
 
                 <TextView
                     android:id="@+id/Commerce_text"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="154dp"
+                    android:layout_height="match_parent"
+                    android:paddingLeft="20px"
                     android:text="Commerce Building " />
 
                 <TextView
                     android:id="@+id/commerce_success"
-                    android:layout_width="211dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="right|center_horizontal"
+                    android:paddingRight="20px"
                     android:text="Failed"
                     android:textColor="#F44336" />
             </TableRow>
@@ -96,12 +99,15 @@
                     android:id="@+id/stdaves_text"
                     android:layout_width="176dp"
                     android:layout_height="wrap_content"
+                    android:paddingLeft="20px"
                     android:text="St Daves" />
 
                 <TextView
                     android:id="@+id/stdaves_success"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:gravity="right|center_horizontal"
+                    android:paddingRight="20px"
                     android:text="Failed"
                     android:textColor="#F44336" />
             </TableRow>
@@ -114,12 +120,15 @@
                     android:id="@+id/textView13"
                     android:layout_width="181dp"
                     android:layout_height="wrap_content"
-                    android:text="Central Library" />
+                    android:text="Central Library"
+                    android:paddingLeft="20px" />
 
                 <TextView
                     android:id="@+id/central_success"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:gravity="right|center_horizontal"
+                    android:paddingRight="20px"
                     android:text="Failed"
                     android:textColor="#F44336" />
             </TableRow>

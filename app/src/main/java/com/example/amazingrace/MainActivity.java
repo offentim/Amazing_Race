@@ -38,12 +38,20 @@ import java.util.ArrayList;
 import java.util.Deque;
 import java.util.List;
 
+import android.media.MediaPlayer;
+
 
 //import android.support.v7.app.AppCompatActivity;
 
 public class MainActivity extends FragmentActivity implements SensorEventListener, OnMapReadyCallback {
     GoogleMap googleMap = null;
     PieChart chart;
+
+
+    private MediaPlayer success;
+    private MediaPlayer error;
+
+
 
     private static final String TAG = "MainActivity";
     private SensorManager mSensorManager;
@@ -93,7 +101,6 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
 
         MapFragment mapFragment = (MapFragment) getFragmentManager()
                 .findFragmentById(R.id.map);
-
         mapFragment.getMapAsync(this);
 
         currentActivity = findViewById(R.id.running);
@@ -105,7 +112,9 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
 
         chart = findViewById(R.id.chart);
 
-        button_test = findViewById(R.id.button_test);
+        success = MediaPlayer.create(this,R.raw.success);
+        error = MediaPlayer.create(this,R.raw.error);
+
 
         GPStracker speedtest = new GPStracker(getApplicationContext());
 
@@ -147,29 +156,25 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
                     gps_value.setText(string);
 
                 }
-            }
-        });
-        button_test.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+
                 if (valueLon >= 170.515300 && valueLon <= 170.516400 && valueLat >= -45.867000 && valueLat <= -45.866000){
-                    Toast.makeText(getApplicationContext(),"Success",Toast.LENGTH_LONG).show();
                     com = true;
+                    success.start();
 
-                }else if(valueLon >=170.513300 && valueLon <=170.514000){
-                    Toast.makeText(getApplicationContext(),"Success",Toast.LENGTH_LONG).show();
+                }else if(valueLon >=170.513300 && valueLon <=170.514000 && valueLat >= -45.864000 && valueLat <= -45.863000){
                     dav = true;
+                    success.start();
 
-                }else if(valueLon >=170.512200 && valueLon <=170.512900){
-                    Toast.makeText(getApplicationContext(),"Success",Toast.LENGTH_LONG).show();
+                }else if(valueLon >=170.512200 && valueLon <=170.512900 && valueLat >= -45.867000 && valueLat <= -45.866000){
                     cen = true;
+                    success.start();
 
                 }else{
                     Toast.makeText(getApplicationContext(),"Get moving",Toast.LENGTH_LONG).show();
+                    error.start();
                 }
             }
         });
-
 
 
 
@@ -297,6 +302,7 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
         if (com == true){
             commerce_success.setText("Success");
             commerce_success.setTextColor(getResources().getColor(R.color.Green));
+
         }
         if (dav == true){
             stdaves_success.setText("Success");
