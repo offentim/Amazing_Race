@@ -1,27 +1,21 @@
 package com.example.amazingrace;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.Typeface;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
 import android.os.Bundle;
-import android.os.Handler;
-import android.text.SpannableString;
-import android.text.style.ForegroundColorSpan;
-import android.text.style.RelativeSizeSpan;
-import android.text.style.StyleSpan;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.media.MediaPlayer;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentActivity;
 
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.PieChart;
@@ -31,8 +25,14 @@ import com.github.mikephil.charting.data.PieDataSet;
 import com.github.mikephil.charting.data.PieEntry;
 import com.github.mikephil.charting.formatter.PercentFormatter;
 import com.github.mikephil.charting.utils.ColorTemplate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
-import java.io.Console;
 import java.text.DecimalFormat;
 import java.util.ArrayDeque;
 import java.util.ArrayList;
@@ -42,7 +42,8 @@ import java.util.List;
 
 //import android.support.v7.app.AppCompatActivity;
 
-public class MainActivity extends AppCompatActivity implements SensorEventListener {
+public class MainActivity extends FragmentActivity implements SensorEventListener, OnMapReadyCallback {
+    GoogleMap googleMap = null;
     PieChart chart;
 
     private static final String TAG = "MainActivity";
@@ -56,6 +57,9 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     TextView speedText;
     TextView distance;
     TextView gps_value;
+    TextView commerce_success;
+    TextView stdaves_success;
+    TextView central_success;
 
     Deque<Double> real = new ArrayDeque<Double>();
 
@@ -63,7 +67,6 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
 
     FFT fft = new FFT(windowSize);
 
-    Button results;
     Button button_gps;
     Button button_test;
 
@@ -71,11 +74,11 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     int walkCount = 0;
     int standCount = 0;
     int totalSteps =0;
+    private MediaPlayer success;
 
 
 
 
-    boolean gps = true;
 
 
     double testLat = -45.866191;
@@ -84,15 +87,25 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
     double valueLat = 0;
     double valueLon = 0;
 
+    boolean com = false;
+    boolean dav = false;
+    boolean cen = false;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        MapFragment mapFragment = (MapFragment) getFragmentManager()
+                .findFragmentById(R.id.map);
+
+        mapFragment.getMapAsync(this);
+
         currentActivity = findViewById(R.id.running);
         speedText = findViewById(R.id.speed);
-        distance = findViewById(R.id.distance);
+        distance = findViewById(R.id.gps_value);
 
         gps_value = findViewById(R.id.gps_value);
         button_gps = findViewById(R.id.button_gps);
@@ -100,6 +113,14 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         chart = findViewById(R.id.chart);
 
         button_test = findViewById(R.id.button_test);
+
+        GPStracker speedtest = new GPStracker(getApplicationContext());
+
+        commerce_success = findViewById(R.id.commerce_success);
+        central_success = findViewById(R.id.central_success);
+        stdaves_success = findViewById(R.id.stdaves_success);
+        success = MediaPlayer.create(this, R.raw.tada);
+
 
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -121,28 +142,37 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
                     String latRounded = f.format(lon);
                     String lonRounded = f.format(lat);
 
-                    double doubleLat = Double.parseDouble(latRounded);
+                    double doubleLat = Double.parseDouble(lonRounded);
                     double doubleLon = Double.parseDouble(latRounded);
 
                     valueLat = doubleLat;
                     valueLon = doubleLon;
 
-                    System.out.println(valueLon);
-                    System.out.println(testLon);
+                    System.out.println(valueLat);
 
 
-                    String string = new String("Lat: "+ latRounded+ " Long: "+lonRounded);
+
+                    String string = new String("Lat: "+ latRounded + "\n" + "Lon: "+lonRounded);
                     gps_value.setText(string);
 
                 }
             }
         });
-
         button_test.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (valueLon >= 170.508000 && valueLon <= 170.508900){
+                if (valueLon >= 170.515300 && valueLon <= 170.516400 && valueLat >= -45.867000 && valueLat <= -45.866000){
                     Toast.makeText(getApplicationContext(),"Success",Toast.LENGTH_LONG).show();
+                    com = true;
+
+                }else if(valueLon >=170.513300 && valueLon <=170.514000){
+                    Toast.makeText(getApplicationContext(),"Success",Toast.LENGTH_LONG).show();
+                    dav = true;
+
+                }else if(valueLon >=170.512200 && valueLon <=170.512900){
+                    Toast.makeText(getApplicationContext(),"Success",Toast.LENGTH_LONG).show();
+                    cen = true;
+
                 }else{
                     Toast.makeText(getApplicationContext(),"Get moving",Toast.LENGTH_LONG).show();
                 }
@@ -150,9 +180,13 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         });
 
 
+
+
         if (mAccelerometer != null) {
             mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_GAME);
         }
+
+
 
         chart.setUsePercentValues(true);
         chart.getDescription().setEnabled(false);
@@ -264,12 +298,26 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         String walking = ("Walking");
         String standing = ("Stationary");
 
-        speedText.setText("Top Speed:");
-        distance.setText("Distance");
+        //speedText.setText("Top Speed:");
+        //distance.setText("Distance");
 
 
 
-
+        if (com == true){
+            commerce_success.setText("Success");
+            commerce_success.setTextColor(getResources().getColor(R.color.Green));
+            success.start();
+        }
+        if (dav == true){
+            stdaves_success.setText("Success");
+            stdaves_success.setTextColor(getResources().getColor(R.color.Green));
+            success.start();
+        }
+        if (cen == true){
+            central_success.setText("Success");
+            central_success.setTextColor(getResources().getColor(R.color.Green));
+            success.start();
+        }
 
 
         while (real.size()> fft.getWindowSize()){
@@ -342,5 +390,32 @@ public class MainActivity extends AppCompatActivity implements SensorEventListen
         mSensorManager.unregisterListener(MainActivity.this);
 
         super.onDestroy();
+    }
+
+
+    @Override
+    public void onMapReady(GoogleMap map) {
+        googleMap = map;
+
+        setUpMap();
+    }
+
+    public void setUpMap(){
+
+
+        googleMap.setMyLocationEnabled(true);
+        LatLng st_daves = new LatLng(-45.863607, 170.513729);
+        LatLng commerce = new LatLng(-45.866391, 170.515965);
+        LatLng central = new LatLng(-45.866640, 170.512458);
+
+
+        googleMap.addMarker(new MarkerOptions().position(st_daves)
+                .title("St Daves"));
+        googleMap.addMarker(new MarkerOptions().position(commerce)
+                .title("The Commerce Building"));
+        googleMap.addMarker(new MarkerOptions().position(central)
+                .title("Central Library"));
+        googleMap.moveCamera(CameraUpdateFactory.newLatLng(st_daves));
+
     }
 }

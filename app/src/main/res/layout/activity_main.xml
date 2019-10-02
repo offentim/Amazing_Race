@@ -8,14 +8,13 @@
 
 
     <TextView
-        android:id="@+id/distance"
+        android:id="@+id/gps_value"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:background="@color/blueish"
         android:gravity="center"
-        android:text="TextView"
         android:textColor="@color/backgroundtest"
-        android:textSize="15sp"
+        android:textSize="13sp"
         app:fontFamily="monospace"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/speed"
@@ -23,13 +22,13 @@
 
     <TextView
         android:id="@+id/running"
-        android:layout_width="0dp"
+        android:layout_width="100dp"
         android:layout_height="50dp"
         android:background="@color/blueish"
         android:gravity="center"
         android:text="TextView"
         android:textColor="@color/backgroundtest"
-        android:textSize="15sp"
+        android:textSize="13sp"
         app:fontFamily="monospace"
         app:layout_constraintEnd_toStartOf="@+id/speed"
         app:layout_constraintStart_toStartOf="parent"
@@ -37,15 +36,15 @@
 
     <TextView
         android:id="@+id/speed"
-        android:layout_width="0dp"
+        android:layout_width="100dp"
         android:layout_height="50dp"
         android:background="@color/blueish"
         android:gravity="center"
-        android:text="TextView"
+        android:text="Speed"
         android:textColor="@color/backgroundtest"
-        android:textSize="15sp"
+        android:textSize="13sp"
         app:fontFamily="monospace"
-        app:layout_constraintEnd_toStartOf="@+id/distance"
+        app:layout_constraintEnd_toStartOf="@+id/gps_value"
         app:layout_constraintStart_toEndOf="@+id/running"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -61,11 +60,71 @@
         android:layout_marginBottom="8dp"
         android:background="@color/blueish"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/results"
+        app:layout_constraintBottom_toTopOf="@+id/button_test"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
+
+        <TableLayout
+            android:layout_width="match_parent"
+            android:layout_height="70dp">
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <TextView
+                    android:id="@+id/Commerce_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Commerce Building " />
+
+                <TextView
+                    android:id="@+id/commerce_success"
+                    android:layout_width="211dp"
+                    android:layout_height="wrap_content"
+                    android:text="Failed"
+                    android:textColor="#F44336" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <TextView
+                    android:id="@+id/stdaves_text"
+                    android:layout_width="176dp"
+                    android:layout_height="wrap_content"
+                    android:text="St Daves" />
+
+                <TextView
+                    android:id="@+id/stdaves_success"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Failed"
+                    android:textColor="#F44336" />
+            </TableRow>
+
+            <TableRow
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" >
+
+                <TextView
+                    android:id="@+id/textView13"
+                    android:layout_width="181dp"
+                    android:layout_height="wrap_content"
+                    android:text="Central Library" />
+
+                <TextView
+                    android:id="@+id/central_success"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Failed"
+                    android:textColor="#F44336" />
+            </TableRow>
+
+        </TableLayout>
 
         <com.github.mikephil.charting.charts.PieChart
             android:id="@+id/chart"
@@ -73,37 +132,39 @@
             android:layout_height="300dp"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/distance" />
+            app:layout_constraintTop_toBottomOf="@+id/gps_value">
+
+        </com.github.mikephil.charting.charts.PieChart>
 
     </LinearLayout>
 
     <Button
-        android:id="@+id/home1"
+        android:id="@+id/button_gps"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:background="@color/blueish"
-        android:text="Start Run"
+        android:text="Get Locaiton"
         android:textColor="@color/backgroundtest"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/results"
+        app:layout_constraintEnd_toStartOf="@+id/button_test"
         app:layout_constraintHorizontal_bias="0.147"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/results"
+        android:id="@+id/button_test"
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:background="@color/blueish"
-        android:text="Finish Run "
+        android:text="Test Location"
         android:textColor="@color/backgroundtest"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/home1" />
+        app:layout_constraintStart_toEndOf="@+id/button_gps" />
 
     <LinearLayout
         android:id="@+id/linearLayout2"
@@ -120,32 +181,14 @@
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/distance">
+        app:layout_constraintTop_toBottomOf="@+id/gps_value">
 
-
-        <TextView
-            android:id="@+id/gps_value"
+        <fragment
+            android:id="@+id/map"
+            android:name="com.google.android.gms.maps.MapFragment"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView" />
+            android:layout_height="match_parent"/>
 
-        <Button
-            android:id="@+id/button_gps"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Button" />
-
-        <Button
-            android:id="@+id/button_test"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Test " />
-
-        <TextView
-            android:id="@+id/text_success."
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="TextView" />
     </LinearLayout>
 
 
