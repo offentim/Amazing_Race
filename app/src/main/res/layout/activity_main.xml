@@ -60,7 +60,7 @@
         android:layout_marginBottom="8dp"
         android:background="@color/blueish"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/button_test"
+        app:layout_constraintBottom_toTopOf="@+id/button_gps"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -72,7 +72,7 @@
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+                android:layout_height="match_parent">
 
                 <TextView
                     android:id="@+id/Commerce_text"
@@ -90,7 +90,7 @@
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+                android:layout_height="match_parent">
 
                 <TextView
                     android:id="@+id/stdaves_text"
@@ -108,7 +108,7 @@
 
             <TableRow
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" >
+                android:layout_height="match_parent">
 
                 <TextView
                     android:id="@+id/textView13"
@@ -148,23 +148,11 @@
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:background="@color/blueish"
-        android:text="Get Locaiton"
-        android:textColor="@color/backgroundtest"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/button_test"
-        app:layout_constraintHorizontal_bias="0.147"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/button_test"
-        android:layout_width="0dp"
-        android:layout_height="50dp"
-        android:background="@color/blueish"
-        android:text="Test Location"
+        android:text="Check me Off"
         android:textColor="@color/backgroundtest"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/button_gps" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <LinearLayout
         android:id="@+id/linearLayout2"
