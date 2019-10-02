@@ -78,9 +78,6 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
 
 
 
-
-
-
     double testLat = -45.866191;
     double testLon = 170.515722;
 
@@ -112,7 +109,7 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
 
         chart = findViewById(R.id.chart);
 
-        button_test = findViewById(R.id.button_test);
+
 
         GPStracker speedtest = new GPStracker(getApplicationContext());
 
