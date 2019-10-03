@@ -1,6 +1,7 @@
 package com.example.amazingrace;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -103,8 +104,7 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        currentActivity = findViewById(R.id.running);
-        speedText = findViewById(R.id.speed);
+
         distance = findViewById(R.id.gps_value);
 
         gps_value = findViewById(R.id.gps_value);
@@ -148,7 +148,7 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
                     valueLat = doubleLat;
                     valueLon = doubleLon;
 
-                    System.out.println(valueLat);
+
 
 
 
@@ -160,29 +160,29 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
                 if (valueLon >= 170.515300 && valueLon <= 170.516400 && valueLat >= -45.867000 && valueLat <= -45.866000){
                     com = true;
                     success.start();
+                    startActivity(new Intent(MainActivity.this, Pop.class));
 
                 }else if(valueLon >=170.513300 && valueLon <=170.514000 && valueLat >= -45.864000 && valueLat <= -45.863000){
                     dav = true;
                     success.start();
+                    startActivity(new Intent(MainActivity.this, Pop.class));
 
                 }else if(valueLon >=170.512200 && valueLon <=170.512900 && valueLat >= -45.867000 && valueLat <= -45.866000){
                     cen = true;
                     success.start();
+                    startActivity(new Intent(MainActivity.this, Pop.class));
 
                 }else{
                     Toast.makeText(getApplicationContext(),"Get moving",Toast.LENGTH_LONG).show();
                     error.start();
                 }
+
             }
         });
-
-
 
         if (mAccelerometer != null) {
             mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_GAME);
         }
-
-
 
         chart.setUsePercentValues(true);
         chart.getDescription().setEnabled(false);
@@ -294,8 +294,6 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
         String walking = ("Walking");
         String standing = ("Stationary");
 
-        //speedText.setText("Top Speed:");
-        //distance.setText("Distance");
 
 
 
@@ -350,21 +348,21 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
 
                 }
 
-                //System.out.println(max);
-                //System.out.println(Integer.toString(ii));
+
+
             }
 
 
 
             if (max > 20 && max < 150) {
-                currentActivity.setText(walking);
+
                 walkCount++;
             }else if(max < 20){
-                currentActivity.setText(standing);
+
                 standCount++;
             }
             if(max >150){
-                currentActivity.setText(running);
+
                 runCount++;
             }
 

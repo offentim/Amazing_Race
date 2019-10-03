@@ -17,35 +17,6 @@
         android:textSize="13sp"
         app:fontFamily="monospace"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/speed"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/running"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:background="@color/blueish"
-        android:gravity="center"
-        android:text="TextView"
-        android:textColor="@color/backgroundtest"
-        android:textSize="13sp"
-        app:fontFamily="monospace"
-        app:layout_constraintEnd_toStartOf="@+id/speed"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/speed"
-        android:layout_width="100dp"
-        android:layout_height="50dp"
-        android:background="@color/blueish"
-        android:gravity="center"
-        android:text="Speed"
-        android:textColor="@color/backgroundtest"
-        android:textSize="13sp"
-        app:fontFamily="monospace"
-        app:layout_constraintEnd_toStartOf="@+id/gps_value"
-        app:layout_constraintStart_toEndOf="@+id/running"
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
@@ -83,7 +54,7 @@
 
                 <TextView
                     android:id="@+id/commerce_success"
-                    android:layout_width="match_parent"
+                    android:layout_width="156dp"
                     android:layout_height="wrap_content"
                     android:gravity="right|center_horizontal"
                     android:paddingRight="20px"
@@ -92,7 +63,7 @@
             </TableRow>
 
             <TableRow
-                android:layout_width="match_parent"
+                android:layout_width="379dp"
                 android:layout_height="match_parent">
 
                 <TextView
@@ -104,9 +75,9 @@
 
                 <TextView
                     android:id="@+id/stdaves_success"
-                    android:layout_width="match_parent"
+                    android:layout_width="120dp"
                     android:layout_height="wrap_content"
-                    android:gravity="right|center_horizontal"
+                    android:gravity="right"
                     android:paddingRight="20px"
                     android:text="Failed"
                     android:textColor="#F44336" />
@@ -125,7 +96,7 @@
 
                 <TextView
                     android:id="@+id/central_success"
-                    android:layout_width="wrap_content"
+                    android:layout_width="142dp"
                     android:layout_height="wrap_content"
                     android:gravity="right|center_horizontal"
                     android:paddingRight="20px"
@@ -157,7 +128,7 @@
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:background="@color/blueish"
-        android:text="Check me Off"
+        android:text="Check Me Off"
         android:textColor="@color/backgroundtest"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -186,6 +157,28 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"/>
 
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:orientation="vertical"
+        android:background="@color/blueish"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="The Amazing Race"
+            android:textColor="#F78620"
+            android:textSize="35sp"
+            android:textStyle="normal|bold|italic" />
     </LinearLayout>
 
 

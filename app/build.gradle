@@ -34,4 +34,5 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.2'
     implementation 'com.google.android.gms:play-services:6.5.87'
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
 }
