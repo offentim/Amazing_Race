@@ -7,6 +7,7 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.View;
@@ -24,6 +25,14 @@ public class Pop extends Activity implements SensorEventListener {
     private SensorManager mSensorManager;
     private Sensor mAccelerometer;
 
+    private SensorManager stepSensorManager;
+    private Sensor stepCounter;
+
+    private MediaPlayer mediaPlayer;
+
+
+
+
     float magnitude;
 
     Deque<Double> real = new ArrayDeque<Double>();
@@ -35,10 +44,16 @@ public class Pop extends Activity implements SensorEventListener {
     int runCount = 0;
 
 
+
     ProgressBar progressBar;
 
     Button button;
 
+    TextView textView;
+
+
+
+    boolean moving = false;
 
 
 
@@ -54,6 +69,8 @@ public class Pop extends Activity implements SensorEventListener {
         int width = dm.widthPixels;
         int height = dm.heightPixels;
 
+        mediaPlayer = MediaPlayer.create(this,R.raw.success);
+
 
         progressBar = findViewById(R.id.progressBar);
 
@@ -63,6 +80,8 @@ public class Pop extends Activity implements SensorEventListener {
 
         button = findViewById(R.id.button);
 
+        textView = findViewById(R.id.textView);
+
 
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
@@ -71,8 +90,19 @@ public class Pop extends Activity implements SensorEventListener {
             mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_GAME);
         }
 
+        stepSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+        if(stepSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)
+                != null)
+        {
+            stepCounter =
+                    mSensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
+            moving = true;
+        }
+        else
+        {
+            moving = false;
 
-
+        }
 
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -93,6 +123,28 @@ public class Pop extends Activity implements SensorEventListener {
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        if(moving)
+        {
+            stepSensorManager.unregisterListener(this);
+        }
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if(moving)
+        {
+            stepSensorManager.registerListener(this, stepCounter,
+                    SensorManager.SENSOR_DELAY_GAME);
+        }
+    }
+
+
+    @Override
     public void onSensorChanged(SensorEvent event) {
         float x = event.values[0];
         float y = event.values[1];
@@ -108,6 +160,7 @@ public class Pop extends Activity implements SensorEventListener {
 
         double max = 0;
         int ii = 0;
+
 
 
         while (real.size()> fft.getWindowSize()){
@@ -138,8 +191,10 @@ public class Pop extends Activity implements SensorEventListener {
 
                 }
             }
+            System.out.println(moving);
 
-            if(max >100){
+
+            if(max >190 && moving == false){
                 runCount++;
             }
         }
@@ -149,11 +204,14 @@ public class Pop extends Activity implements SensorEventListener {
         }else{
             button.setBackgroundColor(getResources().getColor(R.color.Green));
         }
-
+        if (runCount == 500){
+            mediaPlayer.start();
+        }
     }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
 
     }
+
 }
