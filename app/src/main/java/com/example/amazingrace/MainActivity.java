@@ -56,7 +56,10 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
 
     private static final String TAG = "MainActivity";
     private SensorManager mSensorManager;
+
     private Sensor mAccelerometer;
+
+
 
 
     float magnitude;
@@ -68,6 +71,7 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
     TextView commerce_success;
     TextView stdaves_success;
     TextView central_success;
+    TextView textView2;
 
     Deque<Double> real = new ArrayDeque<Double>();
 
@@ -92,6 +96,8 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
     boolean com = false;
     boolean dav = false;
     boolean cen = false;
+
+
 
 
 
@@ -122,8 +128,13 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
         central_success = findViewById(R.id.central_success);
         stdaves_success = findViewById(R.id.stdaves_success);
 
+        textView2 = findViewById(R.id.textView2);
+
         mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
         mAccelerometer = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+
+
+
 
         List<Sensor> sensors = mSensorManager.getSensorList(Sensor.TYPE_ALL);
 
@@ -173,9 +184,12 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
                     startActivity(new Intent(MainActivity.this, Pop.class));
 
                 }else{
-                    Toast.makeText(getApplicationContext(),"Get moving",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(),"You're not close enough to the Marker!",Toast.LENGTH_LONG).show();
                     error.start();
                 }
+
+                System.out.println(valueLat);
+                System.out.println(valueLon);
 
             }
         });
@@ -206,8 +220,6 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
         chart.setRotationEnabled(false);
         chart.setHighlightPerTapEnabled(true);
 
-
-
         chart.animateY(1400, Easing.EasingOption.EaseInCirc);
 
         Legend l = chart.getLegend();
@@ -223,9 +235,6 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
         // entry label styling
         chart.setEntryLabelColor(Color.WHITE);
         chart.setEntryLabelTextSize(12f);
-
-
-
     }
 
     private void setData(int count, float range) {
@@ -263,6 +272,8 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
         super.onPause();
         mSensorManager.unregisterListener(this);
 
+
+
     }
 
     @Override
@@ -272,9 +283,16 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
 
     @Override
     public final void onSensorChanged(SensorEvent event) {
+
         float x = event.values[0];
         float y = event.values[1];
         float z = event.values[2];
+
+
+
+
+
+
 
         double m = Math.sqrt((Math.pow(x,2))+(Math.pow(y,2))+(Math.pow(z,2)));
         float mM = (float)m;
@@ -287,14 +305,7 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
         double max = 0;
         int ii = 0;
 
-        setData(3, 100);
-
-
-        String running = ("Running") ;
-        String walking = ("Walking");
-        String standing = ("Stationary");
-
-
+        setData(3, 90);
 
 
         if (com == true){
@@ -322,14 +333,10 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
             double[] chat = new double[fft.getWindowSize()];
             for (int i = 0 ; i < fft.getWindowSize() ; i++){
                 chat[i] = (Double)realD[i];
-
             }
 
             double[] imagine = new double[fft.getWindowSize()];
             fft.fft(chat,imagine);
-
-
-
 
 
             float powerChat[] = new float[fft.getWindowSize()/2];
@@ -337,21 +344,14 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
 
             for(int i = 1; i < fft.getWindowSize()/2; i++){
                 powerChat[i] = (float)Math.sqrt(chat[i]*chat[i]+imagine[i]*imagine[i]);
-
-
             }
 
             for(int i=0; i<powerChat.length;i++){
                 if(powerChat[i]>max){
                     max = powerChat[i];
                     ii = i;
-
                 }
-
-
-
             }
-
 
 
             if (max > 20 && max < 150) {
@@ -375,6 +375,8 @@ public class MainActivity extends FragmentActivity implements SensorEventListene
     protected void onResume() {
         super.onResume();
         mSensorManager.registerListener(this, mAccelerometer, SensorManager.SENSOR_DELAY_GAME);
+
+
     }
 
     @Override
